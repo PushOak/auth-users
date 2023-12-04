@@ -16,6 +16,13 @@ export default function Login() {
             <div className="--flex-center">
               <button className="--btn --btn-google">Login With Google</button>
             </div>
+            <br />
+            <p className="--text-center --fw-bold">or</p>
+
+            <form>
+              <input type="email" placeholder="Email" required name="email" />
+            </form>
+
           </div>
         </Card>
       </div>
