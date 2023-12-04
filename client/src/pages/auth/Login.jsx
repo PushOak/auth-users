@@ -8,12 +8,14 @@ export default function Login() {
     <>
       <div className={`container ${styles.auth}`}>
         <Card>
-          <div className="--flex-center">
-            <BiLogIn size={35} color="#999" />
-          </div>
-          <h2>Login</h2>
-          <div className="--flex-center">
-            <button className="--btn --btn-google">Login With Google</button>
+          <div className={styles.form}>
+            <div className="--flex-center">
+              <BiLogIn size={35} color="#999" />
+            </div>
+            <h2>Login</h2>
+            <div className="--flex-center">
+              <button className="--btn --btn-google">Login With Google</button>
+            </div>
           </div>
         </Card>
       </div>
