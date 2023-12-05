@@ -4,6 +4,7 @@ import Home from "./pages/home/Home";
 import Layout from "./components/layout/Layout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" element={<Layout><Home /></Layout>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot" element={<ForgotPassword />} />
           </Routes>
         </BrowserRouter>
       </>
