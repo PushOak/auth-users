@@ -3,6 +3,8 @@ import styles from "./auth.module.scss";
 import { Link } from "react-router-dom";
 import Card from "../../components/card/Card";
 import { TiUserAddOutline } from "react-icons/ti";
+import { FaTimes } from "react-icons/fa";
+import { BsCheck2All } from "react-icons/bs";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
 
 const initialState = {
@@ -14,10 +16,27 @@ const initialState = {
 
 export default function Register() {
   const [formData, setFormData] = useState(initialState);
+  const [upperCase, setUpperCase] = useState(false);
+  const [numbers, setNumbers] = useState(false);
+  const [specialCharacter, setSpecialCharacter] = useState(false);
+  const [passwordLength, setPasswordLength] = useState(false);
 
   const { name, email, password, password2 } = formData;
 
-  const handleInputChange = () => {};
+  const timesIcon = <FaTimes color="red" size={15} />;
+  const checkIcon = <BsCheck2All color="green" size={15} />;
+
+  const switchIcon = (condition) => {
+    if (condition) {
+      return checkIcon;
+    }
+    return timesIcon;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const loginUser = () => {};
 
@@ -63,6 +82,36 @@ export default function Register() {
                 value={password2}
                 onChange={handleInputChange}
               />
+
+              {/* Password Strength */}
+              <Card cardClass={styles.group}>
+                <ul className="form-list">
+                  <li>
+                    <span className={styles.indicator}>
+                      {switchIcon(upperCase)}
+                      &nbsp; Lowercase & Uppercase
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.indicator}>
+                      {switchIcon(numbers)}
+                      &nbsp; Number(0-9)
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.indicator}>
+                      {switchIcon(specialCharacter)}
+                      &nbsp; Special characters (!@#$%^&*)
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.indicator}>
+                      {switchIcon(passwordLength)}
+                      &nbsp; At least 6 characters
+                    </span>
+                  </li>
+                </ul>
+              </Card>
 
               <button type="submit" className="--btn --btn-primary --btn-block">
                 Register
