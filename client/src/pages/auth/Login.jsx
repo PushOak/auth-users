@@ -3,6 +3,7 @@ import styles from "./auth.module.scss";
 import { Link } from "react-router-dom";
 import Card from "../../components/card/Card";
 import { BiLogIn } from "react-icons/bi";
+import PasswordInput from "../../components/passwordInput/PasswordInput";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -36,14 +37,20 @@ export default function Login() {
                 onChange={handleInputChange}
                 required
               />
-              <input
+              <PasswordInput
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={handleInputChange}
+              />
+              {/* <input
                 type="password"
                 name="password"
                 placeholder="Password"
                 value={password}
                 onChange={handleInputChange}
                 required
-              />
+              /> */}
               <button type="submit" className="--btn --btn-primary --btn-block">
                 Login
               </button>
@@ -51,9 +58,9 @@ export default function Login() {
 
             <Link to="/forgot">Forgot Password</Link>
             <span className={styles.register}>
-            <Link to="/">Home</Link>
-            <p> &nbsp; Don't have an account? &nbsp; </p>
-            <Link to="/register">Register</Link>
+              <Link to="/">Home</Link>
+              <p> &nbsp; Don't have an account? &nbsp; </p>
+              <Link to="/register">Register</Link>
             </span>
           </div>
         </Card>
