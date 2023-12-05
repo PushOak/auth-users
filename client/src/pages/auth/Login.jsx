@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./auth.module.scss";
+import { Link } from "react-router-dom";
 import Card from "../../components/card/Card";
 import { BiLogIn } from "react-icons/bi";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleInputChange = () => {};
+
+  const loginUser = () => {};
+
   return (
     <>
       <div className={`container ${styles.auth}`}>
@@ -19,10 +27,34 @@ export default function Login() {
             <br />
             <p className="--text-center --fw-bold">or</p>
 
-            <form>
-              <input type="email" placeholder="Email" required name="email" />
+            <form onSubmit={loginUser}>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={handleInputChange}
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={handleInputChange}
+                required
+              />
+              <button type="submit" className="--btn --btn-primary --btn-block">
+                Login
+              </button>
             </form>
 
+            <Link to="/forgot">Forgot Password</Link>
+            <span className={styles.register}>
+            <Link to="/">Home</Link>
+            <p> &nbsp; Don't have an account? &nbsp; </p>
+            <Link to="/register">Register</Link>
+            </span>
           </div>
         </Card>
       </div>
