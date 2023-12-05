@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./auth.module.scss";
 import { Link } from "react-router-dom";
 import Card from "../../components/card/Card";
@@ -37,6 +37,33 @@ export default function Register() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  useEffect(() => {
+    // Check lower and uppercase
+    if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) {
+      setUpperCase(true);
+    } else {
+      setUpperCase(false);
+    }
+    // Check for numbers
+    if (password.match(/([0-9])/)) {
+      setNumbers(true);
+    } else {
+      setNumbers(false);
+    }
+    // Check for special characters
+    if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) {
+      setSpecialCharacter(true);
+    } else {
+      setSpecialCharacter(false);
+    }
+    // Check for password length
+    if (password.length > 5) {
+      setPasswordLength(true);
+    } else {
+      setPasswordLength(false);
+    }
+  }, [password]);
 
   const loginUser = () => {};
 
