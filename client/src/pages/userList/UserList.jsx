@@ -4,6 +4,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import PageMenu from "../../components/pageMenu/PageMenu";
 import UserStats from "../../components/userStats/UserStats";
 import Search from "../../components/search/Search";
+import ChangeRole from "../../components/changeRole/ChangeRole";
 
 export default function UserList() {
   return (
@@ -41,7 +42,7 @@ export default function UserList() {
                     <td>Gato</td>
                     <td>Gato@gmail.com</td>
                     <td>Admin</td>
-                    <td>Change Role</td>
+                    <td>{<ChangeRole />}</td>
                     <td>
                       <span>
                         <FaTrashAlt size={20} color="red" />
