@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./profile.scss";
 import Card from "../../components/card/Card";
 import profileImg from "../../assets/avatarr.png";
-import PageMenu from "../../components/pageMenu/PageMenu"
+import PageMenu from "../../components/pageMenu/PageMenu";
 
 const initialState = {
   name: "Dima",
@@ -19,13 +19,13 @@ export default function Profile() {
 
   const handleImageChange = () => {};
 
-  const handleInputchange = () => {};
+  const handleInputChange = () => {};
 
   return (
     <>
       <section>
         <div className="container">
-            <PageMenu />
+          <PageMenu />
           <h2>Profile</h2>
           <div className="--flex-start profile">
             <Card cardClass={"card"}>
@@ -53,7 +53,7 @@ export default function Profile() {
                       type="text"
                       name="name"
                       value={profile.name}
-                      onChange={handleInputchange}
+                      onChange={handleInputChange}
                     />
                   </p>
 
@@ -63,7 +63,7 @@ export default function Profile() {
                       type="email"
                       name="name"
                       value={profile.email}
-                      onChange={handleInputchange}
+                      onChange={handleInputChange}
                       disabled
                     />
                   </p>
@@ -74,22 +74,24 @@ export default function Profile() {
                       type="text"
                       name="phone"
                       value={profile.phone}
-                      onChange={handleInputchange}
+                      onChange={handleInputChange}
                     />
 
                     <p>
-                      <label>Phone:</label>
+                      <label>Bio:</label>
                       <textarea
                         name="bio"
                         cols="30"
                         rows="10"
                         value={profile.bio}
-                        onChange={handleInputchange}
+                        onChange={handleInputChange}
                       ></textarea>
                     </p>
                   </p>
 
-                  <button className="--btn --btn-primary --btn-block">Update Profile</button>
+                  <button className="--btn --btn-primary --btn-block">
+                    Update Profile
+                  </button>
                 </form>
               </>
             </Card>
