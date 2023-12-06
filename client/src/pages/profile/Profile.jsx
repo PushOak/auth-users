@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./profile.scss";
 import Card from "../../components/card/Card";
 import profileImg from "../../assets/avatarr.png";
+import PageMenu from "../../components/pageMenu/PageMenu"
 
 const initialState = {
   name: "Dima",
@@ -24,6 +25,7 @@ export default function Profile() {
     <>
       <section>
         <div className="container">
+            <PageMenu />
           <h2>Profile</h2>
           <div className="--flex-start profile">
             <Card cardClass={"card"}>
