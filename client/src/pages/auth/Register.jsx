@@ -148,7 +148,7 @@ export default function Register() {
             <span className={styles.register}>
               <Link to="/">Home</Link>
               <p> &nbsp; Already have an account? &nbsp; </p>
-              <Link to="/register">Login</Link>
+              <Link to="/login">Login</Link>
             </span>
           </div>
         </Card>

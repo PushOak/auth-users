@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import styles from "./auth.module.scss";
 import { Link } from "react-router-dom";
 import Card from "../../components/card/Card";
-import { AiOutlineMail } from "react-icons/ai";
+import { MdPassword } from "react-icons/md";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
 
-export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const initialState = {
+  password: "",
+  password2: "",
+};
+
+export default function ResetPassword() {
+  const [formData, setFormData] = useState(initialState);
+  const { password, password2 } = formData;
 
   const handleInputChange = () => {};
 
@@ -19,21 +24,27 @@ export default function ForgotPassword() {
         <Card>
           <div className={styles.form}>
             <div className="--flex-center">
-              <AiOutlineMail size={35} color="#999" />
+              <MdPassword size={35} color="#999" />
             </div>
-            <h2>Forgot Password</h2>
+            <h2>Reset Password</h2>
 
             <form onSubmit={loginUser}>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={email}
+              <PasswordInput
+                name="password"
+                placeholder="Password"
+                value={password}
                 onChange={handleInputChange}
-                required
               />
+
+              <PasswordInput
+                name="password2"
+                placeholder="Conmfirm password"
+                value={password2}
+                onChange={handleInputChange}
+              />
+
               <button type="submit" className="--btn --btn-primary --btn-block">
-                Get Reset Password Email
+                Reset Password
               </button>
 
               <div className={styles.links}>
