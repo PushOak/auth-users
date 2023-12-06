@@ -6,6 +6,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
+import LoginWithCode from "./pages/auth/LoginWithCode";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/forgot" element={<ForgotPassword />} />
             <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+            <Route path="/login-with-code/:email" element={<LoginWithCode />} />
           </Routes>
         </BrowserRouter>
       </>
