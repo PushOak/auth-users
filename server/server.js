@@ -1,9 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+require("dotenv").config();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-require("dotenv").config();
+
+const userRoute = require("./routes/userRoute");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +20,8 @@ app.use(cors({
     credentials: true,
 }));
 
+// Routes
+app.use("/api/v1/users", userRoute);
 
 app.get("/", (req, res) => {
     res.send("Home Page");
