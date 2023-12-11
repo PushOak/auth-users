@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const parser = require("ua-parser-js");
 const { generateToken } = require("../utils");
 
+// Register new user
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -67,8 +68,60 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
+// Login existing user
 const loginUser = asyncHandler(async (req, res) => {
-    res.send("Login user");
+    const { email, password } = req.body;
+
+    // Validate
+    if (!email || !password) {
+        res.send(400);
+        throw new Error("Please add email and password.");
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        res.send(404);
+        throw new Error("User not found! Please sign up.");
+    }
+
+    const passwordIsCorrect = await bcrypt.compare(password, user.password);
+
+    if (!passwordIsCorrect) {
+        res.send(400);
+        throw new Error("Invalid email or password.");
+    }
+
+    // Trigger 2 factor authentication for unknown userAgent
+
+    const token = generateToken(user._id);
+
+    if (user && passwordIsCorrect) {
+        // Send HTTP-only cookie
+        res.cookie("token", token, {
+            path: "/",
+            httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 86400), // this is 1 day
+            sameSite: "none",
+            secure: true,
+        });
+
+        const { _id, name, phone, bio, photo, role, isVerified } = user;
+
+        res.status(200).json({
+            _id,
+            name,
+            phone,
+            bio,
+            photo,
+            role,
+            isVerified,
+            token,
+        });
+    } else {
+        res.send(500);
+        throw new Error("Something went wrong! Please try again.");
+    }
 });
 
 module.exports = {
