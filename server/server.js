@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 
 // Route imports
 const authRoute = require("./routes/authRoute");
+const userRoute = require("./routes/userRoute");
 
 const errorHandler = require("./middleware/errorHandler");
 
@@ -24,6 +25,7 @@ app.use(cors({
 
 // Routes
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/users", userRoute);
 
 app.get("/", (req, res) => {
     res.send("Home Page");
