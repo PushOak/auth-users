@@ -3,8 +3,6 @@ const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../utils");
 
-
-
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
 
