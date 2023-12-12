@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const parser = require("ua-parser-js");
+const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils");
 
 // Register new user
@@ -93,7 +94,6 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     // Trigger 2 factor authentication for unknown userAgent
-
     const token = generateToken(user._id);
 
     if (user && passwordIsCorrect) {
@@ -124,6 +124,23 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 });
 
+// Login status
+const loginStatus = asyncHandler(async (req, res) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.json(false);
+    }
+
+    // verify the token
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (verified) {
+        return res.json(true);
+    }
+    return res.json(false);
+});
+
 // Logout existing user
 const logoutUser = asyncHandler(async (req, res) => {
     res.cookie("token", "", {
@@ -139,5 +156,6 @@ const logoutUser = asyncHandler(async (req, res) => {
 module.exports = {
     registerUser,
     loginUser,
+    loginStatus,
     logoutUser,
 };
