@@ -59,7 +59,13 @@ const updateUser = asyncHandler(async (req, res) => {
     }
 });
 
+// Delete a user (by admin only)
+const deleteUser = asyncHandler(async (req, res) => {
+    res.send("User deleted!");
+});
+
 module.exports = {
     getUser,
     updateUser,
+    deleteUser,
 };
