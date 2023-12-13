@@ -59,18 +59,21 @@ const updateUser = asyncHandler(async (req, res) => {
     }
 });
 
-// Delete a user (by admin only)
-const deleteUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id);
+// Upgrade a user
+const upgradeUser = asyncHandler(async (req, res) => {
+    const { role, id } = req.body;
+    const user = await User.findById(id);
 
     if (!user) {
         res.status(404);
         throw new Error("User not found!");
     }
 
-    await user.deleteOne();
+    user.role = role;
+    await user.save();
+
     res.status(200).json({
-        message: "User deleted successfully.",
+        message: `User ${user.name}'s role updated to ${role}`,
     });
 });
 
@@ -86,9 +89,27 @@ const getUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 });
 
+// Delete a user (by admin only)
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found!");
+    }
+
+    await user.deleteOne();
+    res.status(200).json({
+        message: "User deleted successfully.",
+    });
+});
+
+
+
 module.exports = {
     getUser,
     getUsers,
     updateUser,
+    upgradeUser,
     deleteUser,
 };
