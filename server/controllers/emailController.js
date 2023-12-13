@@ -55,7 +55,7 @@ const sendAutomatedEmail = asyncHandler(async (req, res) => {
 });
 
 // Send verification email
-const sendVerificationemail = asyncHandler(async (req, res) => {
+const sendVerificationEmail = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
@@ -65,7 +65,7 @@ const sendVerificationemail = asyncHandler(async (req, res) => {
 
     if (user.isVerified) {
         res.status(400);
-        throw new Error("User already verified!");
+        throw new Error("User is already verified!");
     }
 
     // delete token if it exists in the DB
@@ -82,7 +82,7 @@ const sendVerificationemail = asyncHandler(async (req, res) => {
     const hashedToken = hashToken(verificationToken);
     await new Token({
         userId: user._id,
-        vToken: hashedToken,
+        verificationToken: hashedToken,
         createdAt: Date.now(),
         expiresAt: Date.now() + 60 * (60 * 1000), // 60 minutes
     }).save();
@@ -109,15 +109,14 @@ const sendVerificationemail = asyncHandler(async (req, res) => {
             name,
             link,
         );
-        res.status(200).json({ message: "Email sent!" });
+        res.status(200).json({ message: "Verification Email sent!" });
     } catch (error) {
         res.status(500);
         throw new Error("Email not sent, please try again.");
     }
-
 });
 
 module.exports = {
     sendAutomatedEmail,
-    sendVerificationemail,
+    sendVerificationEmail,
 };
