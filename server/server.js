@@ -8,7 +8,9 @@ const cookieParser = require("cookie-parser");
 // Route imports
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
+const emailRoute = require("./routes/emailRoute");
 
+// Utilities
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
@@ -26,6 +28,7 @@ app.use(cors({
 // Routes
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", userRoute);
+app.use("/api/v1/emails", emailRoute);
 
 app.get("/", (req, res) => {
     res.send("Home Page");
