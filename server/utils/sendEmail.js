@@ -24,8 +24,9 @@ const sendEmail = async (subject, send_to, sent_from, reply_to, template, name, 
         },
         viewPath: path.resolve("./views"),
         extName: ".handlebars",
-
     }
+
+    transporter.use("compile", hbs(handleBarOptions));
 
     // Options for sending email
     const options = {
