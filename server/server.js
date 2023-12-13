@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const emailRoute = require("./routes/emailRoute");
+const passwordRoute = require("./routes/passwordRoute");
 
 // Utilities
 const errorHandler = require("./middleware/errorHandler");
@@ -29,6 +30,7 @@ app.use(cors({
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/emails", emailRoute);
+app.use("/api/v1/passwords", passwordRoute);
 
 app.get("/", (req, res) => {
     res.send("Home Page");
