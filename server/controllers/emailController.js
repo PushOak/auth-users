@@ -116,7 +116,40 @@ const sendVerificationEmail = asyncHandler(async (req, res) => {
     }
 });
 
+// Verify user
+const verifyUser = asyncHandler(async (req, res) => {
+    const { verificationToken } = req.params
+
+    const hashedToken = hashToken(verificationToken);
+
+    const userToken = await Token.findOne({
+        verificationToken: hashedToken,
+        expiresAt: { $gt: Date.now() },
+    });
+
+    if (!userToken) {
+        res.status(404);
+        throw new Error("Invalid or expired Token.");
+    }
+
+    // find user
+    const user = await User.findOne({ _id: userToken.userId });
+
+    if (user.isVerified) {
+        res.status(400);
+        throw new Error("User is already verified!");
+    }
+
+    // now - verify user
+    user.isVerified = true;
+    await user.save();
+
+    res.status(200).json({ message: "Account verification successful!" });
+
+});
+
 module.exports = {
     sendAutomatedEmail,
     sendVerificationEmail,
+    verifyUser,
 };
