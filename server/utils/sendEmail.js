@@ -32,7 +32,7 @@ const sendEmail = async (
         },
         viewPath: path.resolve("./views"),
         extName: ".handlebars",
-    }
+    };
 
     transporter.use("compile", hbs(handleBarOptions));
 

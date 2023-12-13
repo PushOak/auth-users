@@ -26,6 +26,18 @@ const getUser = asyncHandler(async (req, res) => {
     }
 });
 
+// Get users
+const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find().sort("-createdAt").select("-password");
+
+    if (!users) {
+        res.status(500);
+        throw new Error("Something went wrong!");
+    }
+
+    res.status(200).json(users);
+});
+
 // Update user
 const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
@@ -75,18 +87,6 @@ const upgradeUser = asyncHandler(async (req, res) => {
     res.status(200).json({
         message: `User ${user.name}'s role updated to ${role}`,
     });
-});
-
-// Get users
-const getUsers = asyncHandler(async (req, res) => {
-    const users = await User.find().sort("-createdAt").select("-password");
-
-    if (!users) {
-        res.status(500);
-        throw new Error("Something went wrong!");
-    }
-
-    res.status(200).json(users);
 });
 
 // Delete a user (by admin only)
