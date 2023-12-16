@@ -160,6 +160,11 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 });
 
+// Send login code via email
+const sendLoginCode = asyncHandler(async (req, res) => {
+    res.send("login code via email");
+});
+
 // Login status
 const loginStatus = asyncHandler(async (req, res) => {
     const token = req.cookies.token;
@@ -194,4 +199,5 @@ module.exports = {
     loginUser,
     loginStatus,
     logoutUser,
+    sendLoginCode,
 };
