@@ -5,6 +5,10 @@ const parser = require("ua-parser-js");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils");
 
+const Cryptr = require("cryptr");
+const Token = require("../models/tokenModel");
+const cryptr = new Cryptr(process.env.CRYPTR_KEY);
+
 // Register new user
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
@@ -94,6 +98,38 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     // Trigger 2 factor authentication for unknown userAgent
+    const ua = parser(req.headers["user-agent"]);
+    const thisUserAgent = [ua.ua];
+    console.log(thisUserAgent);
+    const allowedAgent = user.userAgent.includes(thisUserAgent);
+
+    if (!allowedAgent) {
+        // generate 6-digit code
+        const loginCode = Math.floor(100000 + Math.random() * 900000);
+        console.log(loginCode);
+
+        // encrypt login code before saving to DB
+        const encryptedLoginCode = cryptr.encrypt(loginCode.toString());
+
+        // delete token if it exists in the DB
+        let userToken = await Token.findOne({ userId: user._id });
+        if (userToken) {
+            await userToken.deleteOne();
+        }
+
+        // save token to DB
+        await new Token({
+            userId: user._id,
+            loginToken: encryptedLoginCode,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 60 * (60 * 1000), // 60 min
+        }).save();
+
+        res.status(400);
+        throw new Error("Check your email for login code.");
+    }
+
+    // generate token
     const token = generateToken(user._id);
 
     if (user && passwordIsCorrect) {
