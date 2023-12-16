@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const Token = require("../models/tokenModel");
 const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 
 const { generateToken, hashToken } = require("../utils");
 const sendEmail = require("../utils/sendEmail");
@@ -91,10 +92,41 @@ const resetPassword = asyncHandler(async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: "Password reset successful! Please login." });
+});
+
+// Change password
+const changePassword = asyncHandler(async (req, res) => {
+    const { oldPassword, password } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found!");
+    }
+
+    if (!oldPassword || !password) {
+        res.status(400);
+        throw new Error("Please enter and new password.");
+    }
+
+    // Check if old password is correct
+    const passwordIsCorrect = await bcrypt.compare(oldPassword, user.password);
+
+    // save the new password
+    if (user && passwordIsCorrect) {
+        user.password = password;
+        await user.save();
+
+        res.status(200).json({ message: "Password changed successfully. Please re-login." });
+    } else {
+        res.status(400);
+        throw new Error("Old password is incorrect.");
+    }
 
 });
 
 module.exports = {
     forgotPassword,
     resetPassword,
+    changePassword,
 };
