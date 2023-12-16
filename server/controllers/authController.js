@@ -162,7 +162,54 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // Send login code via email
 const sendLoginCode = asyncHandler(async (req, res) => {
-    res.send("login code via email");
+    const { email } = req.params;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        res.send(404);
+        throw new Error("User not found!");
+    }
+
+    // find login code in the DB
+    const userToken = await Token.findOne({
+        userId: user._id,
+        expiresAt: { $gt: Date.now() },
+    });
+
+    if (!userToken) {
+        res.status(404);
+        throw new Error("Invalid or expired token. Please login again.");
+    }
+
+    const loginCode = userToken.loginToken;
+    const decryptedLoginCode = cryptr.decrypt(loginCode);
+
+    // send login code email
+    const subject = "Login Access Code - Auth-Users";
+    const send_to = email;
+    const sent_from = process.env.EMAIL_USER;
+    const reply_to = "noreply@dima.com";
+    const template = "loginCode";
+    const name = user.name;
+    const link = decryptedLoginCode;
+
+    try {
+        await sendEmail(
+            subject,
+            send_to,
+            sent_from,
+            reply_to,
+            template,
+            name,
+            link,
+        );
+        res.status(200).json({ message: `Access code sent to ${email}` });
+    } catch (error) {
+        res.status(500);
+        throw new Error("Email not sent, please try again.");
+    }
+
+
 });
 
 // Login status
