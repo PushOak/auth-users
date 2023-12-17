@@ -126,7 +126,7 @@ const loginUser = asyncHandler(async (req, res) => {
         }).save();
 
         res.status(400);
-        throw new Error("Check your email for login code.");
+        throw new Error("New browser or device detected.");
     }
 
     // generate token
@@ -208,8 +208,78 @@ const sendLoginCode = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error("Email not sent, please try again.");
     }
+});
 
+// Login with code
+const loginWithCode = asyncHandler(async (req, res) => {
+    const { email } = req.params;
+    const { loginCode } = req.body;
 
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found!");
+    }
+
+    // find user Login Token
+    const userToken = await Token.findOne({
+        userId: user.id,
+        expiresAt: { $gt: Date.now(), },
+    });
+
+    if (!userToken) {
+        res.status(404);
+        throw new Error("Invalid or expired token! Please login again.");
+    }
+
+    const decryptedLoginCode = cryptr.decrypt(userToken.loginToken);
+
+    if (loginCode !== decryptedLoginCode) {
+        res.status(400);
+        throw new Error("Incorrect login code, please try again.");
+    } else {
+        // Register user agent
+        const ua = parser(req.headers["user-agent"]);
+        const thisUserAgent = ua.ua;
+        user.userAgent.push(thisUserAgent);
+        await user.save();
+
+        // Generate Token
+        const token = generateToken(user._id);
+
+        // Send HTTP-only cookie
+        res.cookie("token", token, {
+            path: "/",
+            httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 86400), // 1 day
+            sameSite: "none",
+            secure: true,
+        });
+
+        const {
+            _id,
+            name,
+            email,
+            phone,
+            bio,
+            photo,
+            role,
+            isVerified,
+        } = user;
+
+        res.status(200).json({
+            _id,
+            name,
+            email,
+            phone,
+            bio,
+            photo,
+            role,
+            isVerified,
+            token,
+        });
+    }
 });
 
 // Login status
@@ -247,4 +317,5 @@ module.exports = {
     loginStatus,
     logoutUser,
     sendLoginCode,
+    loginWithCode,
 };
