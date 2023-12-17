@@ -1,21 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./auth.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Card from "../../components/card/Card";
 import { BiLogIn } from "react-icons/bi";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
+import { useDispatch, useSelector } from "react-redux";
+import { validateEmail } from "../../redux/features/auth/authService";
+import { toast } from "react-toastify";
+import { RESET, login } from "../../redux/features/auth/authSlice";
+import Loader from "../../components/loader/Loader";
+
+const initialState = {
+  email: "",
+  password: "",
+};
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState(initialState);
+  const { email, password } = formData;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleInputChange = () => {};
+  const { isLoading, isLoggedIn, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
 
-  const loginUser = () => {};
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const loginUser = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      return toast.error("All fields are required!");
+    }
+    if (!validateEmail) {
+      return toast.error("Please enter a valid email!");
+    }
+
+    const userData = {
+      email,
+      password,
+    };
+
+    // console.log(userData);
+    await dispatch(login(userData));
+  };
+
+  useEffect(() => {
+    if (isSuccess && isLoggedIn) {
+      navigate("/profile");
+    }
+
+    dispatch(RESET());
+  }, [isLoggedIn, isSuccess, dispatch, navigate]);
 
   return (
     <>
       <div className={`container ${styles.auth}`}>
+        {isLoading && <Loader />}
         <Card>
           <div className={styles.form}>
             <div className="--flex-center">
