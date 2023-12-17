@@ -6,6 +6,8 @@ import { TiUserAddOutline } from "react-icons/ti";
 import { FaTimes } from "react-icons/fa";
 import { BsCheck2All } from "react-icons/bs";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
+import { toast } from "react-toastify";
+import { validateEmail } from "../../redux/features/auth/authService";
 
 const initialState = {
   name: "",
@@ -65,7 +67,30 @@ export default function Register() {
     }
   }, [password]);
 
-  const loginUser = () => {};
+  const registerUser = (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !password) {
+      return toast.error("All fields are required!");
+    }
+    if (password.length < 6) {
+      return toast.error("Password must be up to 6 characters!");
+    }
+    if (!validateEmail) {
+      return toast.error("Please enter a valid email!");
+    }
+    if (password !== password2) {
+      return toast.error("Passwords don't match!");
+    }
+
+    const userData = {
+      name,
+      email,
+      password,
+    };
+
+    console.log(userData);
+  };
 
   return (
     <>
@@ -77,7 +102,7 @@ export default function Register() {
             </div>
             <h2>Register</h2>
 
-            <form onSubmit={loginUser}>
+            <form onSubmit={registerUser}>
               <input
                 type="text"
                 name="name"
@@ -105,9 +130,14 @@ export default function Register() {
 
               <PasswordInput
                 name="password2"
-                placeholder="Conmfirm password"
+                placeholder="Confirm password"
                 value={password2}
                 onChange={handleInputChange}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  toast.error("Cannot paste into input field");
+                  return false;
+                }}
               />
 
               {/* Password Strength */}
