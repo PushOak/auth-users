@@ -54,7 +54,9 @@ const authSlice = createSlice({
                 state.isSuccess = true;
                 state.isLoggedIn = true;
                 state.user = action.payload;
+                console.log(action.payload);
                 toast.success("Registration successful!");
+                console.log(action.payload);
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = false;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./auth.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Card from "../../components/card/Card";
 import { TiUserAddOutline } from "react-icons/ti";
 import { FaTimes } from "react-icons/fa";
@@ -8,6 +8,9 @@ import { BsCheck2All } from "react-icons/bs";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
 import { toast } from "react-toastify";
 import { validateEmail } from "../../redux/features/auth/authService";
+import { useDispatch, useSelector } from "react-redux";
+import { RESET, register } from "../../redux/features/auth/authSlice";
+import Loader from "../../components/loader/Loader";
 
 const initialState = {
   name: "",
@@ -22,6 +25,13 @@ export default function Register() {
   const [numbers, setNumbers] = useState(false);
   const [specialCharacter, setSpecialCharacter] = useState(false);
   const [passwordLength, setPasswordLength] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isLoading, isLoggedIn, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
 
   const { name, email, password, password2 } = formData;
 
@@ -67,7 +77,7 @@ export default function Register() {
     }
   }, [password]);
 
-  const registerUser = (e) => {
+  const registerUser = async (e) => {
     e.preventDefault();
 
     if (!name || !email || !password) {
@@ -89,12 +99,22 @@ export default function Register() {
       password,
     };
 
-    console.log(userData);
+    // console.log(userData);
+    await dispatch(register(userData));
   };
+
+  useEffect(() => {
+    if (isSuccess && isLoggedIn) {
+      navigate("/profile");
+    }
+
+    dispatch(RESET());
+  }, [isLoggedIn, isSuccess, dispatch, navigate]);
 
   return (
     <>
       <div className={`container ${styles.auth}`}>
+        {isLoading && <Loader />}
         <Card>
           <div className={styles.form}>
             <div className="--flex-center">

@@ -68,7 +68,7 @@ export default function Profile() {
                     />
                   </p>
 
-                  <p>
+                  <div>
                     <label>Phone:</label>
                     <input
                       type="text"
@@ -87,7 +87,7 @@ export default function Profile() {
                         onChange={handleInputChange}
                       ></textarea>
                     </p>
-                  </p>
+                  </div>
 
                   <button className="--btn --btn-primary --btn-block">
                     Update Profile
