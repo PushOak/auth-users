@@ -53,7 +53,9 @@ export default function Header() {
                 </NavLink>
               </li>
               <li>
-                <button className="--btn --btn-secondary">Logout</button>
+                <button className="--btn --btn-secondary" onClick={logoutUser}>
+                  Logout
+                </button>
               </li>
             </ShowOnLogin>
           </ul>
