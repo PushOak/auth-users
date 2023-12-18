@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-const API_URL = `${SERVER_URL}/api/v1/auth/`;
+const AUTH_URL = `${SERVER_URL}/api/v1/auth/`;
+const USERS_URL = `${SERVER_URL}/api/v1/users/`;
 
 // Validate email
 export const validateEmail = (email) => {
@@ -12,31 +13,31 @@ export const validateEmail = (email) => {
 
 // Register user
 const register = async (userData) => {
-    const response = await axios.post(API_URL + "register", userData);
+    const response = await axios.post(AUTH_URL + "register", userData);
     return response.data;
 };
 
 // Login existing user
 const login = async (userData) => {
-    const response = await axios.post(API_URL + "login", userData);
+    const response = await axios.post(AUTH_URL + "login", userData);
     return response.data;
 };
 
 // Logout existing user
 const logout = async () => {
-    const response = await axios.get(API_URL + "logout");
+    const response = await axios.get(AUTH_URL + "logout");
     return response.data.message;
 };
 
 // Get login status
 const getLoginStatus = async () => {
-    const response = await axios.get(API_URL + "login-status");
+    const response = await axios.get(AUTH_URL + "login-status");
     return response.data;
 };
 
 // Get user profile
 const getUser = async () => {
-    const response = await axios.get(API_URL + "get-user");
+    const response = await axios.get(USERS_URL + "get-user");
     return response.data;
 };
 

@@ -1,23 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./profile.scss";
 import Card from "../../components/card/Card";
 import profileImg from "../../assets/avatarr.png";
 import PageMenu from "../../components/pageMenu/PageMenu";
 import useRedirectLoggedOutUser from "../../customHook/useRedirectLoggedOutUser";
-
-const initialState = {
-  name: "Dima",
-  email: "dima@gmail.com",
-  phone: "",
-  bio: "",
-  photo: "",
-  role: "",
-  isVerified: false,
-};
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../redux/features/auth/authSlice";
+import Loader from "../../components/loader/Loader";
 
 export default function Profile() {
   useRedirectLoggedOutUser("/login");
+  const dispatch = useDispatch();
+  
+  const { isLoading, isLoggedIn, isSuccess, message, user } = useSelector(
+    (state) => state.auth
+    );
+    
+    const initialState = {
+      name: user?.name || "",
+      email: user?.mail || "",
+      phone: user?.phone || "",
+      bio: user?.bio || "",
+      photo: user?.photo || "",
+    role: user?.role || "",
+    isVerified: user?.isVerified || false,
+  };
+  
   const [profile, setProfile] = useState(initialState);
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
 
   const handleImageChange = () => {};
 
@@ -27,6 +40,7 @@ export default function Profile() {
     <>
       <section>
         <div className="container">
+          {isLoading && <Loader />}
           <PageMenu />
           <h2>Profile</h2>
           <div className="--flex-start profile">
@@ -34,8 +48,8 @@ export default function Profile() {
               <>
                 <div className="profile-photo">
                   <div>
-                    <img src={profileImg} alt="profile-pic" />
-                    <h3>Role: Subscriber</h3>
+                    <img src={profile?.photo} alt="profile-pic" />
+                    <h3>Role: {profile.role}</h3>
                   </div>
                 </div>
                 <form>
@@ -54,7 +68,7 @@ export default function Profile() {
                     <input
                       type="text"
                       name="name"
-                      value={profile.name}
+                      value={profile?.name}
                       onChange={handleInputChange}
                     />
                   </p>
@@ -64,7 +78,7 @@ export default function Profile() {
                     <input
                       type="email"
                       name="name"
-                      value={profile.email}
+                      value={profile?.email}
                       onChange={handleInputChange}
                       disabled
                     />
@@ -75,7 +89,7 @@ export default function Profile() {
                     <input
                       type="text"
                       name="phone"
-                      value={profile.phone}
+                      value={profile?.phone}
                       onChange={handleInputChange}
                     />
 
@@ -85,7 +99,7 @@ export default function Profile() {
                         name="bio"
                         cols="30"
                         rows="10"
-                        value={profile.bio}
+                        value={profile?.bio}
                         onChange={handleInputChange}
                       ></textarea>
                     </p>

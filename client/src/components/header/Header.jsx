@@ -36,7 +36,7 @@ export default function Header() {
             <ShowOnLogin>
               <li className="--flex-fenter">
                 <FaUserCircle size={20} />
-                <p className="--color-white">Hi, Cat |</p>
+                {/* <p className="--color-white">Hi, Cat |</p> */}
               </li>
             </ShowOnLogin>
             <ShowOnLogOut>
