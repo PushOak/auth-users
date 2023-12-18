@@ -41,12 +41,19 @@ const getUser = async () => {
     return response.data;
 };
 
+// Update profile
+const updateUser = async (userData) => {
+    const response = await axios.patch(USERS_URL + "update-user", userData);
+    return response.data;
+};
+
 const authService = {
     register,
     login,
     logout,
     getLoginStatus,
     getUser,
+    updateUser,
 };
 
 export default authService;
