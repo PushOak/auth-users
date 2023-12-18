@@ -23,14 +23,14 @@ const login = async (userData) => {
 };
 
 // Logout existing user
-const logout = async (userData) => {
+const logout = async () => {
     const response = await axios.get(API_URL + "logout");
     return response.data.message;
 };
 
 // Get login status
-const getLoginStatus = async (userData) => {
-    const response = await axios.get(API_URL + "loginStatus");
+const getLoginStatus = async () => {
+    const response = await axios.get(API_URL + "login-status");
     return response.data;
 };
 

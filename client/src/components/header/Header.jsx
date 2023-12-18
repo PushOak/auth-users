@@ -5,6 +5,7 @@ import { MdLogin } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { RESET, logout } from "../../redux/features/auth/authSlice";
+import { ShowOnLogOut, ShowOnLogin } from "../protect/hiddenLink";
 
 const activeLink = ({ isActive }) => (isActive ? "active" : "");
 
@@ -32,23 +33,29 @@ export default function Header() {
           </div>
 
           <ul className="home-links">
-            <li className="--flex-fenter">
-              <FaUserCircle size={20} />
-              <p className="--color-white">Hi, Cat |</p>
-            </li>
-            <li>
-              <button className="--btn --btn-primary" onClick={logoutUser}>
-                <Link to="/login">Login</Link>
-              </button>
-            </li>
-            <li>
-              <NavLink to="/profile" className={activeLink}>
-                Profile
-              </NavLink>
-            </li>
-            <li>
-              <button className="--btn --btn-secondary">Logout</button>
-            </li>
+            <ShowOnLogin>
+              <li className="--flex-fenter">
+                <FaUserCircle size={20} />
+                <p className="--color-white">Hi, Cat |</p>
+              </li>
+            </ShowOnLogin>
+            <ShowOnLogOut>
+              <li>
+                <button className="--btn --btn-primary" onClick={logoutUser}>
+                  <Link to="/login">Login</Link>
+                </button>
+              </li>
+            </ShowOnLogOut>
+            <ShowOnLogin>
+              <li>
+                <NavLink to="/profile" className={activeLink}>
+                  Profile
+                </NavLink>
+              </li>
+              <li>
+                <button className="--btn --btn-secondary">Logout</button>
+              </li>
+            </ShowOnLogin>
           </ul>
         </nav>
       </header>
