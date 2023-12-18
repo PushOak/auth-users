@@ -11,30 +11,38 @@ import Loader from "../../components/loader/Loader";
 export default function Profile() {
   useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
-  
+
   const { isLoading, isLoggedIn, isSuccess, message, user } = useSelector(
     (state) => state.auth
-    );
-    
-    const initialState = {
-      name: user?.name || "",
-      email: user?.mail || "",
-      phone: user?.phone || "",
-      bio: user?.bio || "",
-      photo: user?.photo || "",
+  );
+
+  const initialState = {
+    name: user?.name || "",
+    email: user?.mail || "",
+    phone: user?.phone || "",
+    bio: user?.bio || "",
+    photo: user?.photo || "",
     role: user?.role || "",
     isVerified: user?.isVerified || false,
   };
-  
+
   const [profile, setProfile] = useState(initialState);
+  const [profileImage, setProfileImage] = useState(initialState);
+  const [imagePreview, setImagePreview] = useState(initialState);
 
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
 
-  const handleImageChange = () => {};
+  const handleImageChange = (e) => {
+    setProfileImage(e.target.files[0]);
+    setImagePreview(URL.createObjectURL(e.target.files[0]));
+  };
 
-  const handleInputChange = () => {};
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProfile({ ...profile, [name]: value });
+  };
 
   return (
     <>
@@ -48,7 +56,10 @@ export default function Profile() {
               <>
                 <div className="profile-photo">
                   <div>
-                    <img src={profile?.photo} alt="profile-pic" />
+                    <img
+                      src={imagePreview === null ? user?.photo : imagePreview}
+                      alt="profile-pic"
+                    />
                     <h3>Role: {profile.role}</h3>
                   </div>
                 </div>
