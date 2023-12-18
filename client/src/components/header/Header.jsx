@@ -3,14 +3,23 @@ import "./header.scss";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { MdLogin } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { RESET, logout } from "../../redux/features/auth/authSlice";
 
 const activeLink = ({ isActive }) => (isActive ? "active" : "");
 
 export default function Header() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const goHome = () => {
     navigate("/");
+  };
+
+  const logoutUser = async () => {
+    dispatch(RESET());
+    await dispatch(logout());
+    navigate("/login");
   };
 
   return (
@@ -28,7 +37,7 @@ export default function Header() {
               <p className="--color-white">Hi, Cat |</p>
             </li>
             <li>
-              <button className="--btn --btn-primary">
+              <button className="--btn --btn-primary" onClick={logoutUser}>
                 <Link to="/login">Login</Link>
               </button>
             </li>

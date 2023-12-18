@@ -24,7 +24,7 @@ const login = async (userData) => {
 
 // Logout existing user
 const logout = async (userData) => {
-    const response = await axios.post(API_URL + "logout");
+    const response = await axios.get(API_URL + "logout");
     return response.data.message;
 };
 
