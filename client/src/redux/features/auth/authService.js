@@ -28,10 +28,17 @@ const logout = async (userData) => {
     return response.data.message;
 };
 
+// Get login status
+const loginStatus = async (userData) => {
+    const response = await axios.get(API_URL + "loginStatus");
+    return response.data;
+};
+
 const authService = {
     register,
     login,
     logout,
+    loginStatus,
 };
 
 export default authService;

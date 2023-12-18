@@ -67,6 +67,24 @@ export const logout = createAsyncThunk(
     }
 );
 
+// Get login status of user
+export const loginStatus = createAsyncThunk(
+    "auth/loginStatus",
+    async (_, thunkAPI) => {
+        try {
+            return await authService.loginStatus();
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -102,6 +120,7 @@ const authSlice = createSlice({
                 state.user = null;
                 toast.error(action.payload);
             })
+
             // login user
             .addCase(login.pending, (state, action) => {
                 state.isLoading = true;
@@ -122,6 +141,7 @@ const authSlice = createSlice({
                 state.user = null;
                 toast.error(action.payload);
             })
+
             // logout user
             .addCase(logout.pending, (state, action) => {
                 state.isLoading = true;
@@ -138,6 +158,21 @@ const authSlice = createSlice({
                 state.isError = true;
                 state.message = action.payload;
                 toast.error(action.payload);
+            })
+
+            // login status
+            .addCase(loginStatus.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(loginStatus.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isLoggedIn = action.payload;
+            })
+            .addCase(loginStatus.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
             })
     },
 });
