@@ -229,7 +229,7 @@ const authSlice = createSlice({
             })
 
             // Update user
-            .addCase(updateUser.pending, (state, action) => {
+            .addCase(updateUser.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(updateUser.fulfilled, (state, action) => {
@@ -237,6 +237,7 @@ const authSlice = createSlice({
                 state.isSuccess = true;
                 state.isLoggedIn = true;
                 state.user = action.payload;
+                toast.success("User updated!");
             })
             .addCase(updateUser.rejected, (state, action) => {
                 state.isLoading = false;
