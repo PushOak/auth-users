@@ -16,6 +16,16 @@ import { toast } from "react-toastify";
 const cloud_name = process.env.REACT_APP_CLOUD_NAME;
 const upload_preset = process.env.REACT_APP_UPLOAD_PRESET;
 
+// Shorten text (user name)
+const shortenText = (text, n) => {
+  if (text.length > n) {
+    const shortenedText = text.subString(0, n).concat("...");
+    return shortenedText;
+  }
+
+  return text;
+};
+
 export default function Profile() {
   useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
@@ -196,5 +206,5 @@ export const UserName = () => {
 
   const userName = user?.name || "...";
 
-  return <p className="--color-white"> Hello, {userName} |</p>;
+  return <p className="--color-white"> Hello, {shortenText(userName, 9)} |</p>;
 };
