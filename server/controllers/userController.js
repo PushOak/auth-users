@@ -43,9 +43,9 @@ const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-        const { name, phone, bio, photo, role, isVerified } = user;
+        const { name, email, phone, bio, photo, role, isVerified } = user;
 
-        const email = req.body.email;
+        // const email = req.body.email;
 
         user.email = email;
         user.name = req.body.name || name;
@@ -58,6 +58,7 @@ const updateUser = asyncHandler(async (req, res) => {
         res.status(200).json({
             _id: updatedUser._id,
             name: updatedUser.name,
+            email: updatedUser.email,
             phone: updatedUser.phone,
             bio: updatedUser.bio,
             photo: updatedUser.photo,

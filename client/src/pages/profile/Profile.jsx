@@ -19,11 +19,9 @@ const upload_preset = process.env.REACT_APP_UPLOAD_PRESET;
 export default function Profile() {
   useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
-
   const { isLoading, isLoggedIn, isSuccess, message, user } = useSelector(
     (state) => state.auth
   );
-
   const initialState = {
     name: user?.name || "",
     email: user?.email || "",
@@ -33,7 +31,6 @@ export default function Profile() {
     role: user?.role || "",
     isVerified: user?.isVerified || false,
   };
-
   const [profile, setProfile] = useState(initialState);
   const [profileImage, setProfileImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -52,7 +49,7 @@ export default function Profile() {
     setProfile({ ...profile, [name]: value });
   };
 
-  // Save image to cloudinary
+  // Update user profile
   const saveProfile = async (e) => {
     e.preventDefault();
     let imageURL;
@@ -81,6 +78,7 @@ export default function Profile() {
       // Save profile to MongoDB
       const userData = {
         name: profile.name,
+        email: profile.email,
         phone: profile.phone,
         bio: profile.bio,
         photo: profileImage ? imageURL : profile.photo,
@@ -118,72 +116,72 @@ export default function Profile() {
             <Card cardClass={"card"}>
               {!isLoading && user && (
                 <>
-                <div className="profile-photo">
-                  <div>
-                    <img
-                      src={imagePreview === null ? user?.photo : imagePreview}
-                      alt="profile-pic"
-                    />
-                    <h3>Role: {profile.role}</h3>
+                  <div className="profile-photo">
+                    <div>
+                      <img
+                        src={imagePreview === null ? user?.photo : imagePreview}
+                        alt="profile-pic"
+                      />
+                      <h3>Role: {profile.role}</h3>
+                    </div>
                   </div>
-                </div>
-                <form onSubmit={saveProfile}>
-                  <p>
-                    <label>Change Photo:</label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      name="image"
-                      onChange={handleImageChange}
-                    />
-                  </p>
-
-                  <p>
-                    <label>Name:</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={profile?.name}
-                      onChange={handleInputChange}
-                    />
-                  </p>
-
-                  <p>
-                    <label>Email:</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={profile?.email}
-                      onChange={handleInputChange}
-                      disabled
-                    />
-                  </p>
-
-                  <div>
-                    <label>Phone:</label>
-                    <input
-                      type="text"
-                      name="phone"
-                      value={profile?.phone}
-                      onChange={handleInputChange}
-                    />
+                  <form onSubmit={saveProfile}>
+                    <p>
+                      <label>Change Photo:</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="image"
+                        onChange={handleImageChange}
+                      />
+                    </p>
 
                     <p>
-                      <label>Bio:</label>
-                      <textarea
-                        name="bio"
-                        cols="30"
-                        rows="10"
-                        value={profile?.bio}
+                      <label>Name:</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={profile?.name}
                         onChange={handleInputChange}
-                      ></textarea>
+                      />
                     </p>
-                  </div>
-                  <button className="--btn --btn-primary --btn-block">
-                    Update Profile
-                  </button>
-                </form>
-              </>
+
+                    <p>
+                      <label>Email:</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={profile?.email}
+                        onChange={handleInputChange}
+                        disabled
+                      />
+                    </p>
+
+                    <div>
+                      <label>Phone:</label>
+                      <input
+                        type="text"
+                        name="phone"
+                        value={profile?.phone}
+                        onChange={handleInputChange}
+                      />
+
+                      <p>
+                        <label>Bio:</label>
+                        <textarea
+                          name="bio"
+                          cols="30"
+                          rows="10"
+                          value={profile?.bio}
+                          onChange={handleInputChange}
+                        ></textarea>
+                      </p>
+                    </div>
+                    <button className="--btn --btn-primary --btn-block">
+                      Update Profile
+                    </button>
+                  </form>
+                </>
               )}
             </Card>
           </div>
@@ -198,5 +196,5 @@ export const UserName = () => {
 
   const userName = user?.name || "...";
 
-  return <p className="--color-white"> Hello, {userName} |</p>
+  return <p className="--color-white"> Hello, {userName} |</p>;
 };
