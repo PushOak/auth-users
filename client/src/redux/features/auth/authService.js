@@ -54,6 +54,12 @@ const sendVerificationEmail = async () => {
     return response.data.message;
 };
 
+// Verify user
+const verifyUser = async (verificationToken) => {
+    const response = await axios.patch(`${EMAILS_URL}verify-user/${verificationToken}`);
+    return response.data.message;
+};
+
 const authService = {
     register,
     login,
@@ -62,6 +68,7 @@ const authService = {
     getUser,
     updateUser,
     sendVerificationEmail,
+    verifyUser,
 };
 
 export default authService;
