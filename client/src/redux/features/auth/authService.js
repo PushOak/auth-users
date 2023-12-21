@@ -3,6 +3,7 @@ import axios from "axios";
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const AUTH_URL = `${SERVER_URL}/api/v1/auth/`;
 const USERS_URL = `${SERVER_URL}/api/v1/users/`;
+const EMAILS_URL = `${SERVER_URL}/api/v1/emails/`;
 
 // Validate email
 export const validateEmail = (email) => {
@@ -49,7 +50,7 @@ const updateUser = async (userData) => {
 
 // Send verfication
 const sendVerificationEmail = async () => {
-    const response = await axios.post(USERS_URL + "send-verification-email");
+    const response = await axios.post(EMAILS_URL + "send-verification-email");
     return response.data.message;
 };
 

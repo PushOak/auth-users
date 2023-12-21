@@ -12,6 +12,7 @@ import {
 } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import { toast } from "react-toastify";
+import Notification from "../../components/notification/Notification";
 
 const cloud_name = process.env.REACT_APP_CLOUD_NAME;
 const upload_preset = process.env.REACT_APP_UPLOAD_PRESET;
@@ -119,6 +120,7 @@ export default function Profile() {
     <>
       <section>
         {isLoading && <Loader />}
+        {!profile.isVerified && <Notification />}
         <div className="container">
           <PageMenu />
           <h2>Profile</h2>
