@@ -4,6 +4,16 @@ import Card from "../../components/card/Card";
 import profileImg from "../../assets/avatarr.png";
 import PageMenu from "../../components/pageMenu/PageMenu";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
+import useRedirectLoggedOutUser from "../../customHook/useRedirectLoggedOutUser";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import {
+  RESET,
+  changePassword,
+  logout,
+} from "../../redux/features/auth/authSlice";
+import { Spinner } from "../../components/loader/Loader";
 
 const initialState = {
   oldPassword: "",
@@ -12,11 +22,40 @@ const initialState = {
 };
 
 export default function ChangePassword() {
+  useRedirectLoggedOutUser("/login");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
-
   const { oldPassword, password, password2 } = formData;
 
-  const handleInputChange = () => {};
+  const { isLoading, user } = useSelector((state) => state.auth);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const updatePassword = async (e) => {
+    e.preventDefault();
+
+    if (!oldPassword || !password || !password2) {
+      return toast.error("All fields are required!");
+    }
+
+    if (password !== password2) {
+      return toast.error("Passwords don't match!");
+    }
+
+    const userData = {
+      oldPassword,
+      password,
+    };
+
+    await dispatch(changePassword(userData));
+    await dispatch(logout());
+    await dispatch(RESET(userData));
+    navigate("/login");
+  };
 
   return (
     <>
@@ -27,7 +66,7 @@ export default function ChangePassword() {
           <div className="--flex-start change-password">
             <Card cardClass={"card"}>
               <>
-                <form>
+                <form onSubmit={updatePassword}>
                   <p>
                     <label>Current Password:</label>
                     <PasswordInput
@@ -58,9 +97,16 @@ export default function ChangePassword() {
                     />
                   </p>
 
-                  <button className="--btn --btn-primary --btn-block">
-                    Change Password
-                  </button>
+                  {isLoading ? (
+                    <Spinner />
+                  ) : (
+                    <button
+                      className="--btn --btn-primary --btn-block"
+                      type="submit"
+                    >
+                      Change Password
+                    </button>
+                  )}
                 </form>
               </>
             </Card>
