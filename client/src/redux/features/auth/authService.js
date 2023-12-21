@@ -4,6 +4,7 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const AUTH_URL = `${SERVER_URL}/api/v1/auth/`;
 const USERS_URL = `${SERVER_URL}/api/v1/users/`;
 const EMAILS_URL = `${SERVER_URL}/api/v1/emails/`;
+const PASSWORDS_URL = `${SERVER_URL}/api/v1/passwords/`;
 
 // Validate email
 export const validateEmail = (email) => {
@@ -60,6 +61,12 @@ const verifyUser = async (verificationToken) => {
     return response.data.message;
 };
 
+// Change password
+const changePassword = async (userData) => {
+    const response = await axios.patch(PASSWORDS_URL + "change-password", userData);
+    return response.data.message;
+};
+
 const authService = {
     register,
     login,
@@ -69,6 +76,7 @@ const authService = {
     updateUser,
     sendVerificationEmail,
     verifyUser,
+    changePassword,
 };
 
 export default authService;
