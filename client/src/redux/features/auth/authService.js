@@ -47,6 +47,12 @@ const updateUser = async (userData) => {
     return response.data;
 };
 
+// Send verfication
+const sendVerificationEmail = async () => {
+    const response = await axios.post(USERS_URL + "send-verification-email");
+    return response.data.message;
+};
+
 const authService = {
     register,
     login,
@@ -54,6 +60,7 @@ const authService = {
     getLoginStatus,
     getUser,
     updateUser,
+    sendVerificationEmail,
 };
 
 export default authService;
